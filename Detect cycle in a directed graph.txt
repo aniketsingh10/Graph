@@ -1,0 +1,69 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+  public:
+    // Function to detect cycle in a directed graph.
+    
+    bool dfs(vector<int> adj[],int src,vector<bool>&vis,vector<bool>&stack){
+        vis[src]=true;
+        stack[src]=true;
+        
+        for(int u:adj[src]){
+            if(vis[u]==false and dfs(adj,u,vis,stack)){
+                return true;
+            }
+            else if(stack[u]==true){
+                return true;
+            }
+        }
+        stack[src]=false;
+        return false;
+    }
+    
+    bool isCyclic(int V, vector<int> adj[]) {
+        vector<bool>vis;
+        vector<bool>stack;
+        
+        for(int i=0;i<V;i++){
+            vis.push_back(false);
+            stack.push_back(false);
+        }
+        
+        for(int i=0;i<V;i++){
+            if(vis[i]==false){
+                if(dfs(adj,i,vis,stack)==true){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+};
+
+//{ Driver Code Starts.
+
+int main() {
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int V, E;
+        cin >> V >> E;
+
+        vector<int> adj[V];
+
+        for (int i = 0; i < E; i++) {
+            int u, v;
+            cin >> u >> v;
+            adj[u].push_back(v);
+        }
+
+        Solution obj;
+        cout << obj.isCyclic(V, adj) << "\n";
+    }
+
+    return 0;
+}
+
+// } Driver Code Ends

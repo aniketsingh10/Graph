@@ -1,0 +1,66 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+
+class Solution {
+  public:
+    // Function to detect cycle in an undirected graph.
+    bool dfs(vector<int> adj[],vector<bool>&vis,int src,int par){
+        
+        vis[src]=true;
+       
+        for(auto x: adj[src]){
+            if(vis[x]==false){
+                if(dfs(adj,vis,x,src)==true){
+                    return true;
+                }
+            }
+            else if(x!=par){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    bool isCycle(int V, vector<int> adj[]) {
+        vector<bool>vis;
+        for(int i=0;i<V;i++){
+            vis.push_back(false);
+        }
+        
+        for(int i=0;i<V;i++){
+            if(vis[i]==false){
+                if(dfs(adj,vis,i,-1)==true){
+                    return true;
+                }
+            }
+        }
+        return false;
+        
+    }
+};
+
+//{ Driver Code Starts.
+int main() {
+    int tc;
+    cin >> tc;
+    while (tc--) {
+        int V, E;
+        cin >> V >> E;
+        vector<int> adj[V];
+        for (int i = 0; i < E; i++) {
+            int u, v;
+            cin >> u >> v;
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+        }
+        Solution obj;
+        bool ans = obj.isCycle(V, adj);
+        if (ans)
+            cout << "1\n";
+        else
+            cout << "0\n";
+    }
+    return 0;
+}
+// } Driver Code Ends
